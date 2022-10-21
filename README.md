@@ -1,3 +1,3 @@
 # Personal Solana Program
 
-### complete full stack project
+### - complete full stack project
