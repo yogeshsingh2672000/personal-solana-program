@@ -7,22 +7,30 @@ const TWITTER_HANDLE = '_buildspace';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
 const App = () => {
-  const [walletAddress, seWalletAddress] = useState(null);
+  const [walletAddress, setWalletAddress] = useState(null);
 
   const checkIfWalletIsConnected = async () => {
     const {solana} = window;
-    const isConnected = await solana.connect();
+    const isConnected = await solana.connect({ onlyIfTrusted: true });
     if (solana.isPhantom){
       console.log("Phantom Wallet is connected");
       console.log("Public Key: ", isConnected.publicKey.toString());
-      seWalletAddress(isConnected.publicKey.toString());
+      setWalletAddress(isConnected.publicKey.toString());
       console.log(walletAddress);
     } else {
       console.log("Phantom Wallet is not present")
     }
   }
 
-  const connectWallet = async () => {};
+  const connectWallet = async () => {
+    const { solana } = window;
+
+    if (solana) {
+      const response = await solana.connect();
+      console.log('Connected with Public Key:', response.publicKey.toString());
+      setWalletAddress(response.publicKey.toString());
+    }
+  };
 
   const renderNotConnectedContainer = () => (
     <button
