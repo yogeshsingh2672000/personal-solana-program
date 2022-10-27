@@ -3,6 +3,7 @@ import twitterLogo from './assets/twitter-logo.svg';
 import './App.css';
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import { Program, Provider, web3 } from '@project-serum/anchor';
+import kp from './keypair.json'
 
 // Constants
 const TWITTER_HANDLE = '_buildspace';
@@ -18,7 +19,9 @@ const TEST_GIFS = [
 const { SystemProgram, Keypair } = web3;
 
 // Create a keypair for the account that will hold the GIF data.
-let baseAccount = Keypair.generate();
+const arr = Object.values(kp._keypair.secretKey)
+const secret = new Uint8Array(arr)
+const baseAccount = Keypair.fromSecretKey(secret)
 
 // This is the address of your solana program, if you forgot, just run solana address -k target/deploy/myepicproject-keypair.json
 const programID = new PublicKey("5L2J8HqMME2E6eUwfKUGZJRhnAgEGPe9xDjzBDVVLvKL");
@@ -159,7 +162,7 @@ const App = () => {
               {/* We use index as the key instead, also, the src is now item.gifLink */}
               {gifList.map((item, index) => (
                 <div className="gif-item" key={index}>
-                  <iframe src={item.gifLink} />
+                  <iframe title='myframe' src={item.gifLink} />
                 </div>
               ))}
             </div>
