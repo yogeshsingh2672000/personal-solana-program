@@ -1,3 +1,4 @@
+import React, {useState, useEffect} from 'react';
 import twitterLogo from './assets/twitter-logo.svg';
 import './App.css';
 
@@ -6,6 +7,30 @@ const TWITTER_HANDLE = '_buildspace';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
 const App = () => {
+  const [walletAddress, seWalletAddress] = useState(null);
+
+  const checkIfWalletIsConnected = async () => {
+    const {solana} = window;
+    const isConnected = await solana.connect();
+    if (solana.isPhantom){
+      console.log("Phantom Wallet is connected");
+      console.log("Public Key: ", isConnected.publicKey.toString());
+      seWalletAddress(isConnected.publicKey.toString());
+      console.log(walletAddress);
+    } else {
+      console.log("Phantom Wallet is not present")
+    }
+  }
+  
+  useEffect(() => {
+    const onLoad = async () => {
+      await checkIfWalletIsConnected();
+    };
+    window.addEventListener('load', onLoad);
+    return () => window.removeEventListener('load', onLoad);
+  });
+  
+
   return (
     <div className="App">
       <div className="container">
